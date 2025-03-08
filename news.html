@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <link rel="stylesheet" href="news.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>News App</h1>
+            <p>Enter a keyword or location to get the latest news.</p>
+        </header>
+        
+        <div class="search-container">
+            <label for="search-query" class="sr-only">Search news by keyword or location</label>
+            <input type="text" id="search-query" placeholder="Search news by keyword or location" aria-label="Search news by keyword or location">
+            
+            <button id="search-button" aria-label="Search news">Search</button>
+        </div>
+
+        <div id="news-container" class="news-container">
+        </div>
+    </div>
+
+    <script src="news.js"></script>
+</body>
+</html>

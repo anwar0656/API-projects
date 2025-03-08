@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TMDB Movie Database</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+        }
+        input {
+            width: 80%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: none;
+            border-radius: 5px;
+        }
+        button {
+            padding: 10px 15px;
+            border: none;
+            background: #007BFF;
+            color: white;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .movie-card {
+            margin-top: 20px;
+        }
+        img {
+            width: 100%;
+            border-radius: 10px;
+        }
+        .movie-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
+        }
+        .movie-item {
+            width: 45%;
+            background: #2a2a2a;
+            padding: 10px;
+            border-radius: 10px;
+        }
+        .movie-item img {
+            width: 100%;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>TMDB Movie Database</h1>
+        <input type="text" id="movieQuery" placeholder="Enter Movie Name...">
+        <button onclick="searchMovies()">Search</button>
+        <div class="movie-list" id="movieList"></div>
+    </div>
+
+    <script>
+        const API_KEY = "1c2de1de60253f1fc346f9c5b8726676";
+        const SEARCH_URL = "https://api.themoviedb.org/3/search/movie";
+        const IMAGE_BASE_URL = "https://image.tmdb.org/t/p/w500";
+
+        function searchMovies() {
+            const query = document.getElementById("movieQuery").value;
+            if (!query) return;
+
+            fetch(`${SEARCH_URL}?api_key=${API_KEY}&query=${encodeURIComponent(query)}`)
+                .then(response => response.json())
+                .then(data => {
+                    const movieList = document.getElementById("movieList");
+                    movieList.innerHTML = ""; 
+                    
+                    if (data.results.length === 0) {
+                        movieList.innerHTML = "<p>No movies found.</p>";
+                        return;
+                    }
+
+                    data.results.forEach(movie => {
+                        const movieItem = document.createElement("div");
+                        movieItem.classList.add("movie-item");
+                        
+                        const posterUrl = movie.poster_path 
+                            ? `${IMAGE_BASE_URL}${movie.poster_path}` 
+                            : "https://via.placeholder.com/500x750?text=No+Image";
+
+                        movieItem.innerHTML = `
+                            <h3>${movie.title}</h3>
+                            <img src="${posterUrl}" alt="${movie.title}">
+                            <p>${movie.release_date || "Unknown Release Date"}</p>
+                        `;
+
+                        movieList.appendChild(movieItem);
+                    });
+                })
+                .catch(error => console.error("Error fetching movies:", error));
+        }
+    </script>
+</body>
+</html>
